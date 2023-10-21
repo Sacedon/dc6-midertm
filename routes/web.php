@@ -58,7 +58,7 @@ Route::middleware(['auth', 'verified', 'role:admin|supervisor'])->group(function
     });
 
     Route::prefix('users')->group(function () {
-        Route::get('/', [UserController::class, 'index'])->name('users');
+        Route::get('/', [UserController::class, 'index'])->middleware('role:admin')->name('users');
     });
 });
 
