@@ -1,7 +1,7 @@
 <template>
     <AuthenticatedLayout>
-      <template #header>
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+      <template #header >
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight" >
           Add New Product
         </h2>
       </template>
@@ -102,6 +102,7 @@
   import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
   import { router } from '@inertiajs/vue3';
   import FullContentModal1 from '@/Components/FullContentModal1.vue';
+
 
   const form = ref({
     brand: '',

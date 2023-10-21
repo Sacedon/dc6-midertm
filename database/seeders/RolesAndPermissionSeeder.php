@@ -16,22 +16,30 @@ class RolesAndPermissionSeeder extends Seeder
     public function run(): void
     {
         $user = User::create([
+            'name' => 'User',
+            'email' => 'user1@gmail.com',
+            'password' => bcrypt('password'),
+        ]);
+
+        $user3 = User::create([
             'name' => 'Cashier',
-            'email' => 'cashier@email.com',
+            'email' => 'cashier@gmail.com',
             'password' => bcrypt('password'),
         ]);
 
         $user1 = User::create([
             'name' => 'Supervisor',
-            'email' => 'supervisor@email.com',
+            'email' => 'supervisor@gmail.com',
             'password' => bcrypt('password'),
         ]);
 
         $user2 = User::create([
             'name' => 'Administrator',
-            'email' => 'admin@email.com',
+            'email' => 'admin@gmail.com',
             'password' => bcrypt('password'),
         ]);
+
+        $userRole = Role::create(['name' => 'Default']);
 
         $cashier = Role::create(['name' => 'cashier']);
         $supervisor = Role::create(['name' => 'supervisor']);
@@ -68,9 +76,10 @@ class RolesAndPermissionSeeder extends Seeder
 
         $admin->givePermissionTo($manage_users);
 
-        $user->assignRole($cashier);
+        $user3->assignRole($cashier);
         $user1->assignRole($supervisor);
         $user2->assignRole($admin);
+        $user->assignRole($userRole);
     }
 }
 

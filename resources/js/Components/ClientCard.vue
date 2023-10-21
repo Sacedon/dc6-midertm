@@ -20,6 +20,7 @@
 
   <script setup>
   import { router } from '@inertiajs/vue3';
+  import { inject } from 'vue';
 
   const props = defineProps({
     client: Object,

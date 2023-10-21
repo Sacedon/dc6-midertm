@@ -34,29 +34,30 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    // Profile routes
-    Route::group(['prefix' => 'profile'], function () {
+    Route::prefix('profile')->group(function () {
         Route::get('edit', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('update', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('destroy', [ProfileController::class, 'destroy'])->name('profile.destroy');
     });
 
-    Route::group(['prefix' => 'products'], function () {
+    Route::prefix('products')->group(function () {
         Route::get('/', [ProductController::class, 'index'])->name('products');
-        Route::get('create', [ProductController::class, 'create'])->name('product.create');
+        Route::get('create', [ProductController::class, 'create'])->middleware('role:admin|supervisor')->name('product.create');
         Route::post('/', [ProductController::class, 'store'])->name('product.store');
         Route::post('{product}', [ProductController::class, 'destroy']);
     });
 
     Route::get('/sales', [SalesController::class, 'index'])->name('sales.index');
     Route::get('soldItems', [SalesController::class, 'soldItems'])->name('sales.soldItems');
+});
 
-    Route::group(['prefix' => 'clients', 'middleware' => 'role:admin'], function () {
+Route::middleware(['auth', 'verified', 'role:admin|supervisor'])->group(function () {
+    Route::prefix('clients')->group(function () {
         Route::get('/', [ClientController::class, 'index'])->name('clients');
         Route::get('{client}', [ClientController::class, 'show']);
     });
 
-    Route::group(['prefix' => 'users', 'middleware' => 'role:admin'], function () {
+    Route::prefix('users')->group(function () {
         Route::get('/', [UserController::class, 'index'])->name('users');
     });
 });

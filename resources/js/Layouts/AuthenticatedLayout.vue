@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, provide, watch } from 'vue';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
@@ -8,12 +8,21 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link } from '@inertiajs/vue3';
 
 const showingNavigationDropdown = ref(false);
+
+const storedTheme = localStorage.getItem('darkTheme');
+const darkTheme = ref(storedTheme !== null ? JSON.parse(storedTheme) : false);
+
+watch(darkTheme, (newValue) => {
+  localStorage.setItem('darkTheme', newValue);
+});
+
+provide('darkTheme', darkTheme)
 </script>
 
 <template>
     <div>
-        <div class="min-h-screen bg-gray-100">
-            <nav class="bg-white border-b border-gray-100">
+        <div :class="[ darkTheme ? 'min-h-screen bg-gray-800' : 'min-h-screen bg-gray-100' ]">
+            <nav :class="[darkTheme ? 'bg-dark border-b border-gray-700' : 'bg-white border-b border-gray-100']">
                 <!-- Primary Navigation Menu -->
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex justify-between h-16">
@@ -22,26 +31,26 @@ const showingNavigationDropdown = ref(false);
                             <div class="shrink-0 flex items-center">
                                 <Link :href="route('dashboard')">
                                     <ApplicationLogo
-                                        class="block h-9 w-auto fill-current text-gray-800"
+                                    :class="[darkTheme ? 'block h-9 w-auto fill-current text-white' : 'block h-9 w-auto fill-current text-gray-800' ]"
                                     />
                                 </Link>
                             </div>
 
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
+                                <NavLink :class="darkTheme ? 'text-white mr-6' : 'text-gray-800 mr-6'" :href="route('dashboard')" :active="route().current('dashboard')">
                                     Dashboard
                                 </NavLink>
-                                <NavLink :href="route('products')" :active="route().current('products')">
+                                <NavLink :class="darkTheme ? 'text-white mr-6' : 'text-gray-800 mr-6'" :href="route('products')" :active="route().current('products')">
                                     Products
                                 </NavLink>
-                                <NavLink v-if="$page.props.auth.user.permissions.includes('make-sales')" :href="route('sales.index')" :active="route().current('sales.index')">
+                                <NavLink :class="darkTheme ? 'text-white mr-6' : 'text-gray-800 mr-6'" v-if="$page.props.auth.user.permissions.includes('make-sales')" :href="route('sales.index')" :active="route().current('sales.index')">
                                     Sales
                                 </NavLink>
-                                <NavLink v-if="$page.props.auth.user.permissions.includes('manage')" :href="route('clients')" :active="route().current('clients')">
+                                <NavLink :class="darkTheme ? 'text-white mr-6' : 'text-gray-800 mr-6'" v-if="$page.props.auth.user.permissions.includes('manage')" :href="route('clients')" :active="route().current('clients')">
                                     Clients
                                 </NavLink>
-                                <NavLink v-if="$page.props.auth.user.permissions.includes('manage-users')" :href="route('users')" :active="route().current('users')">
+                                <NavLink :class="darkTheme ? 'text-white mr-6' : 'text-gray-800 mr-6'" v-if="$page.props.auth.user.permissions.includes('manage-users')" :href="route('users')" :active="route().current('users')">
                                     Users
                                 </NavLink>
                             </div>
@@ -49,13 +58,17 @@ const showingNavigationDropdown = ref(false);
 
                         <div class="hidden sm:flex sm:items-center sm:ml-6">
                             <!-- Settings Dropdown -->
-                            <div class="ml-3 relative">
+                            <div class="ml-3 relative inline-flex items-center">
+                                <button @click="darkTheme = !darkTheme" class="m-5">
+                                    <i :class="[ darkTheme ? 'fa-regular fa-sun text-white' : 'fa-solid fa-circle-half-stroke' ] "></i>
+                                </button>
                                 <Dropdown align="right" width="48">
                                     <template #trigger>
                                         <span class="inline-flex rounded-md">
                                             <button
                                                 type="button"
                                                 class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
+                                                :class="[ darkTheme ? 'text-gray-300 bg-gray-500' : 'text-gray-600 bg-gray-50' ]"
                                             >
                                                 {{ $page.props.auth.user.name }}
 
