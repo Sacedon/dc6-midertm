@@ -1,11 +1,13 @@
 <template>
     <AuthenticatedLayout>
       <div class="py-8 mx-auto max-w-7xl">
-        <a href="products/create">
-                <button v-if="$page.props.auth.user.permissions.includes('make-sales')" class="bg-blue-500 text-black rounded-lg border-2 border-solid hover:border-blue-500 hover:bg-gray-50 hover:text-gray-700 px-3 py-1 mb-2">
-                  Add Products
-                </button>
-              </a>
+        <div v-if="$page.props.auth.user.permissions.includes('make-sales')">
+            <Link :href="'/products/create'">
+          <button class="bg-blue-500 text-black rounded-lg border-2 border-solid hover:border-blue-500 hover:bg-gray-50 hover:text-gray-700 px-3 py-1 mb-2">
+            Add Products
+          </button>
+        </Link>
+      </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <div v-for="product in products.data" :key="product.id" class="bg-white shadow-sm sm:rounded-lg p-4">
             <div @click="openModal(product.thumbnail, product.name, 'Thumbnail')" class="cursor-pointer">
@@ -42,6 +44,7 @@
   import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
   import Pagination from '@/Components/Pagination.vue';
   import FullContentModal from '@/Components/FullContentModal.vue';
+  import { Link } from '@inertiajs/vue3';
 
   const props = defineProps({
     products: Object,
